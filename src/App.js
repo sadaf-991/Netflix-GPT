@@ -1,9 +1,13 @@
+
 import './App.css';
+import Body from './Components/Body';
+
+
 
 function App() {
   return (
-    <div className="text-red-700 font-bold">
-      Hello
+    <div>
+    <Body />
     </div>
   );
 }
