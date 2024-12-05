@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import Header from "./Header";
 import { CheckValidData } from "../utils/validate";
 import { auth } from "../utils/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 
 const Login = () => {
@@ -43,7 +43,23 @@ if(!isbtnClicked){
       setErrMsg(errorCode + "-" + errorMessage);
     });
 } else {
-      //sign in logic    
+      //sign in logic  
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+      .then((userCredential)=>{
+        //Signed in
+        const user = userCredential.user;
+        console.log(user);
+      })
+      .catch((error)=>{
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        setErrMsg(errorCode + "-" + errorMessage);
+      });
+
 }      
 }
 
