@@ -2,13 +2,16 @@ import { useState, useRef } from "react";
 import Header from "./Header";
 import { CheckValidData } from "../utils/validate";
 import { auth } from "../utils/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
 
 const [isbtnClicked, setIsbtnClicked] = useState(true);
 const [errMsg, setErrMsg] = useState(null);
+const navigate = useNavigate();
+
 
 const name = useRef(null);
 const email = useRef(null);
@@ -35,7 +38,17 @@ if(!isbtnClicked){
 .then((userCredential) => {
       // Signed up 
       const user = userCredential.user;
-      console.log(user);
+      updateProfile(user, {
+        displayName: name.current.value, 
+        photoURL: "https://tse2.mm.bing.net/th?id=OIP.NDsekgZCeB-BkRqXm88aNAHaHR&pid=Api&P=0&h=180",
+      })
+      .then(() => {
+        navigate("/browse");
+      })
+      .catch((error) => {
+        setErrMsg(error.message)
+      });
+      
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -53,6 +66,7 @@ if(!isbtnClicked){
         //Signed in
         const user = userCredential.user;
         console.log(user);
+        navigate("/browse")
       })
       .catch((error)=>{
         const errorCode = error.code;
