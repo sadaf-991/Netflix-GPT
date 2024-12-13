@@ -3,14 +3,14 @@ import Header from "./Header";
 import { CheckValidData } from "../utils/validate";
 import { auth } from "../utils/firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-
+import { addUser } from '../utils/appSlice';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
 
+  const dispatch = useDispatch();
 const [isbtnClicked, setIsbtnClicked] = useState(true);
 const [errMsg, setErrMsg] = useState(null);
-const navigate = useNavigate();
 
 
 const name = useRef(null);
@@ -43,7 +43,15 @@ if(!isbtnClicked){
         photoURL: "https://tse2.mm.bing.net/th?id=OIP.NDsekgZCeB-BkRqXm88aNAHaHR&pid=Api&P=0&h=180",
       })
       .then(() => {
-        navigate("/browse");
+        const { uid, email, displayName, photoURL } = auth.currentUser;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
       })
       .catch((error) => {
         setErrMsg(error.message)
@@ -66,7 +74,7 @@ if(!isbtnClicked){
         //Signed in
         const user = userCredential.user;
         console.log(user);
-        navigate("/browse")
+        
       })
       .catch((error)=>{
         const errorCode = error.code;

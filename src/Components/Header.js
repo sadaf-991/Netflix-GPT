@@ -1,12 +1,17 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebase';
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
+import { onAuthStateChanged } from 'firebase/auth';
+import { useDispatch } from 'react-redux';
+import { addUser, removeUser } from "../utils/appSlice";
 
 const Header = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
+
   const handleSignOut = () => {
     
     signOut(auth)
@@ -19,6 +24,29 @@ const Header = () => {
       navigate("/error");
     })
   }; 
+
+  useEffect(()=>{
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(user){
+        const { uid, email, displayName, photoURL } = auth.currentUser;
+        dispatch(
+          addUser({
+          uid: uid, 
+          email: email, 
+          displayName: displayName,
+          photoURL: photoURL,
+        }));
+    navigate("/browse");
+      }else{
+        dispatch(removeUser());
+       navigate("/")
+      }
+    });
+
+    //unsubscribe when component unmounts
+    return () => unsubscribe();
+  },[]);
+
   return (
     <div>
     <div className='flex justify-between absolute py-2 px-8 bg-gradient-to-b from-black z-10 w-screen'>
