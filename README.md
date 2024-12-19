@@ -21,7 +21,21 @@
 - Fetch TMDB api : it is a database which has all the movies 
 - Register TMDB API & create an app & get access token
 - Get Data from TMDB now playing movies list API
-
+- Custom hook for Now Playing Movies
+- Created MovieSlice
+- Update store with Trailer Video Data
+- Embedded the YouTube video and make it autoPlay and mute
+- Tailwind Classes to make Main Container look awesome
+- Build Secondry Component
+- Build Movie List
+- Build Movie Card
+- TMDB Image CDN URL
+- Made the Browse page amazing with Tailwind CSS
+- usePopularMovies Custom hook
+- GPT Serach Page
+- GPT Search Bar
+- (BONUS) Multi -language feature in my App
+- Integrate GPT 
 
 # Features
 - Login/Sign Up
